@@ -1,0 +1,66 @@
+---
+title: "Using Models 2"
+author: "Elyse McCormick"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Q1 (4 pts.): Re-create the conditional boxplot of penguin body mass conditioned on sex and species. Include your boxplot as a figure in your report.**
+
+```{r echo=FALSE}
+require(palmerpenguins)
+boxplot(formula = body_mass_g ~ sex * species, data = penguins, 
+        names = c(" Female \n Adelie", "Male \n Adelie", "Female \n Chinstrap", "Male \n Chinstrap",
+                  "Female \n Gentoo", "Male \n Gentoo"),
+        xlab = "",
+        ylab = "Body Mass (g)", las = 2, col = "slategray2")
+```
+
+**Q2 (2 pts.): Based on the boxplots, do you think male penguins are significantly heavier than female penguins of the same species? Explain your reasoning, and be sure to explain why you think any observed differences are significant or not.**
+
+It's hard to tell whether it's truly significant without a test, but there is a sizeable difference in male body mass over female body mass. The means of males in each species are higher than the means of females and the whiskers don't overlap. 
+
+**Q3 (2 pts.): Do you think adding sex to a model that already includes species will improve the model fit? Make sure you justify your answer based on the boxplots and not results of a statistical test.**
+
+In this case, I think this is an addition that will help clarify the model. Especially in the case of Gentoo penguins, male body mass is much higher than the body masses of other species. Still, male body mass seems larger than female regardless of species. I think including sex may improve model fit and show differences in these effects. 
+
+**Q4 (2 pts.): Show the R-code you used to build fit_both.**
+
+```{r}
+fit_both = lm(body_mass_g ~ sex * species, data = penguins)
+```
+
+
+**Q5 (2 pts.): What is the base case for the two-way model that includes sex and species?**
+
+```{r}
+summary(fit_both)
+```
+According to the summary of the fit_both model, the base case should be the sexmale:speciesChinstrap case, because it has the base level of predictor one (sexmale) and the base level of predictor two (speciesChinstrap).
+
+**Q6 (2 pts.): What are the names of the two coefficients (from the first column of the coefficient table) that you need to calculate the average mass of female Chinstrap penguins?**
+
+You would need to use the intercept and sexmale:speciesChinstrap to be able to calculate the average mass of female chinstrap penguins.
+
+**Q7 (2 pts.): What is the predicted average mass of female Chinstrap penguins in the interactive model?**
+
+```{r}
+
+3368.84 - 262.89
+
+```
+
+**Q8 (2 pts.): What is the observed average mass of female Chinstrap penguins, calculated from the penguins data?**
+
+```{r}
+aggregate(body_mass_g ~ species*sex, data = penguins, FUN = mean)
+```
+
+The observed mass of the female Chinstrap penguins is 3527.206 g. 
+
+
+

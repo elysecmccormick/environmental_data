@@ -1,0 +1,4 @@
+"0","curve("
+"0","  exp_fun(x, 1.9, 0.1), col = ""black"",  "
+"0","  from = 0, to = 50, add = FALSE, main = ""Exponential Function Test Plot"","
+"0","  xlab = ""x"", ylab = ""f(x)"")"

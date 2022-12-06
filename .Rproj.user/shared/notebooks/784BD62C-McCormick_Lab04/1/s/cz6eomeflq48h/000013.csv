@@ -1,0 +1,7 @@
+"0",""
+"0","n_samples = 1211"
+"0","pop_sd = 800"
+"0","pop_mean = 1905"
+"0",""
+"0","dat_1 = rnorm(n = n_samples, mean = pop_mean, sd = pop_sd)"
+"0","hist(dat_1, xlab = ""X"", main = ""Data 2 Histogram"", col = ""mediumvioletred"")"

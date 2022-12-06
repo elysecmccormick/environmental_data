@@ -1,0 +1,119 @@
+---
+title: "Using Models"
+author: "Elyse McCormick"
+date: "`r Sys.Date()`"
+output: html_document
+subtitle: Analysis of Environmental Data
+---
+
+**Q1 (1 pt.): Create a histogram of the salamander reproduction catastrophic rates.Make sure you include an appropriate title and label for the x-axis.**
+
+```{r echo=TRUE}
+require(here)
+catrate <- read.csv(here("data", "catrate.csv"))
+hist(catrate$cat.rate, xlab = "Catastrophe Rate", main = "Histogram of Catastrophe Rates",
+     col = "orangered3")
+```
+
+**Q2 (1 pt.): Conduct a Shapiro-Wilk test of normality of the salamander catastrophic rates. Report the p-value and show the R-code you used to conduct the test.**
+
+```{r}
+shapiro.test(catrate$cat.rate)
+```
+
+**Q3 (1 pt.): What is the null hypothesis for the Shapiro test?**
+
+The null hypothesis for the Shapiro-Wilk test is that the data are normally distributed. 
+
+**Q4 (1 pt.): Based on the Shapiro test results, is there strong evidence that the sample came from a non-normally-distributed population?**
+
+There is strong evidence. In this case, we can reject the null hypothesis, since p = 0.04097, which is below the accepted alpha value of 0.05. This indicates that these samples came from a non-normally distributed population.
+
+**Q5 (1 pt.): Show the code you used to conduct the t-test.Hint: your answer should only be a single line of code.**
+
+```{r}
+t.test(catrate$cat.rate, y = NULL, mu = 2/7)
+```
+
+**Q6 (1 pt.): State the null hypothesis of the test, in plain nontechnical English.**
+
+The null hypothesis states that the catastrophic rate is not different from the pond late-filling rate.
+
+**Q7 (1 pt.): Is this a one- or two-tailed test?**
+
+This is a two-tailed test, because the hypotheses are not directional, it simply indicates that there is some kind of difference between the rates. 
+
+**Q8 (2 pts.): What is the p-value from your t-test? Interpret the p-value as a false-positive rate using nontechnical English that a non-scientist would understand.**
+
+```{r}
+t.test(catrate$cat.rate, y = NULL, mu = 0.2875143, alternative = "greater")
+```
+In this case, the p value is the probability that we see a difference between a catastrophic reproduction rate in salamanders, and a reproduction rate governed by late pond filling. 
+
+**Q9 (1 pt.): What is the confidence interval for the difference between the null hypothesis and alternative hypothesis means? Did it include zero?**
+
+The 95% confidence interval spans from 0.3866123 - Inf. This interval includes zero. 
+
+**Q10 (2 pts.): Considering the results from your t-test, did you conclude that there was strong evidence to reject the null hypothesis? Make sure you justify your answer using the output of the t-test.**
+
+There is strong evidence to reject the null hypothesis. The p value (0.006204) is below an alpha of 0.05, indicating that we reject the null hypothesis. The observed catastrophe rate comes from a population in which catastrophes are solely the result of late pond-filling in the fall.
+
+**Q11 (1 pt.): Show the code you used to conduct the test.**
+
+```{r}
+wilcox.test(catrate$cat.rate, mu = 2 / 7)
+```
+
+**Q12 (1 pt.): Compare the p-value with the p-value you got from the t-test.**
+
+Wilcox p value = 0.006275
+T-test p value = 0.006204
+
+The results of these two tests are almost identical. 
+
+**Q13 (2 pts.): Considering the results from your rank sum test, did you conclude that there was strong evidence to reject the null hypothesis? Make sure you justify your answer using the output of the test.**
+
+There is strong evidence to reject the null hypothesis. The p value (0.006275) is below an alpha of 0.05, indicating that we reject the null hypothesis. This evidence is especially strong considering that the p value is almost identical to the t.test p value. 
+
+**Q14 (1 pt.): Compare the overall conclusions you could draw from the results of the two tests.**
+
+These two tests come to the same general conclusion, which is that there is a difference between the catastrophe rate of reproduction and the late-pond filling reproductive rate of marbled salamanders. 
+
+**Q15 (1 pt.): Considering the numerical and graphical data exploration, which test do you think was more appropriate for these data?**
+
+Based on the results of the Shapiro-Wilk test and the histogram, the Wilcoxon test is likely more appropriate as the data are not normally distributed, violating an assumption of parametric tests.
+
+**Q16 (2 pts.): Show the R-code you used to conduct tests of normality for the flipper lengths of Chinstrap and Adelie penguins.**
+
+```{r}
+require(palmerpenguins)
+penguin_dat = droplevels(subset(penguins, species != "Gentoo"))    
+dat_adelie = subset(penguin_dat, species == "Adelie")
+shapiro.test(dat_adelie$flipper_length_mm)
+
+dat_chinstrap = subset(penguin_dat, species =="Chinstrap")
+shapiro.test(dat_chinstrap$flipper_length_mm)
+```
+
+**Q17 (2 pts.): Interpret the test results. Do you conclude that the flipper lengths are normally-distributed for each species? Make sure your answers make reference to the test output.**
+
+Flipper lengths for Adelie (p = 0.72) and Chinstrap (p = 0.8106) are normally distributed, as they are both p values well above an alpha of 0.05. 
+
+**Q18 (2 pts.): Save your figure to a file and include it in your report. Your figure needs to have appropriate dimensions such that the two histograms are not vertically stretched.**
+
+```{r echo=TRUE}
+par(mfrow = c(1,2))   
+hist(dat_adelie$flipper_length_mm, main = "Adelie Flipper Length", xlab = "Flipper Length (mm)", col = "royalblue4")
+hist(dat_chinstrap$flipper_length_mm, main = "Chinstrap Flipper Length", xlab = "Flipper Length (mm)", col = "royalblue1")
+```
+
+**Q19 (2 pts.): State the alternative hypothesis of the test, in plain nontechnical English.Consider whether you used a one- or two- tailed test.**
+
+The alternative hypothesis of this test was that there would be a difference in average flipper length between Adelie and Chinstrap penguins. This test was two-tailed, meaning there was no expectation of which penguin species might have larger flippers. 
+
+**Q20 (1 pt.): Include the code you used to conduct the t-test.**
+
+```{r}
+t.test(flipper_length_mm ~ species, data = penguin_dat)
+```
+

@@ -1,0 +1,2 @@
+"0","boxplot(formula = body_mass_g ~ sex, data = penguins, main = ""Penguin Body Mass by Sex"", "
+"0","        xlab = ""Sex"", ylab = ""Body Mass (g)"", col = ""steelblue2"")"

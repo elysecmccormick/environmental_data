@@ -1,0 +1,5 @@
+"0","require(palmerpenguins)"
+"0","fit_species = "
+"0","  lm("
+"0","    formula = body_mass_g ~ species,"
+"0","    data = penguins)"

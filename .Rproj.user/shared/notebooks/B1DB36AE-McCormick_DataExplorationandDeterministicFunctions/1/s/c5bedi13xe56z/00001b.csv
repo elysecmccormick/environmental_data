@@ -1,0 +1,5 @@
+"0","require(""psych"")"
+"0","require(""here"")"
+"0","dat.hab <- read.csv(here(""data"", ""hab.sta.csv""))"
+"0","par(mfrow = c(1, 3))"
+"0","hist(dat.hab$elev, xlab = ""Elevation"", main = ""Elevation Distribution"", col = adjustcolor(rgb(0,1,1), alpha.f = 0.2), pch = 16, cex = 2)"

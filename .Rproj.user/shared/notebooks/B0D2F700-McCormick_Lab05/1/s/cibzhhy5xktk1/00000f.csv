@@ -1,0 +1,2 @@
+"0","par(mfrow = c(1, 3))"
+"0","hist(sal_dat$resids_linear, xlab = ""Residuals"", main = ""Histogram of Linear Residuals"", col = ""red"")"

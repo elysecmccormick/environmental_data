@@ -1,0 +1,2 @@
+"0","par(mfrow = c(1,3))"
+"0","plot(y ~ x, data = dat_random, pch = 8, col = ""steelblue1"", main = ""Data for Scatterplot 1"" )"

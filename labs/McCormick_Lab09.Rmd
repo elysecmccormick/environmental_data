@@ -1,0 +1,222 @@
+---
+title: 'Lab 9: Modeling Data 2'
+author: "Elyse McCormick"
+date: "`r Sys.Date()`"
+output: html_document
+subtitle: Analysis of Environmental Data
+---
+
+**Q1 (1 pt.): State the null hypothesis of the Chi-square test.Make sure you state the null hypothesis in terms of Brown Creeper presence/absence and edge/interior habitats.**
+
+The null hypothesis for this analysis states that brown creepers show no difference in presence between what we observe and what we expect between forest interiors versus forest edges. 
+
+**Q2 (2 pts.): Consider the results of your test and explain whether you think that Brown Creepers show a significant habitat preference.Make sure your use the output of your statistical test to support your answer.**
+
+```{r echo=FALSE}
+require(here)
+
+birds   = read.csv(here("data", "bird.sta.csv"))
+hab     = read.csv(here("data", "hab.sta.csv"))
+birdhab = merge(
+  birds,
+  hab, by=c("basin", "sub", "sta"))
+
+br_creeper_table = table(
+  birdhab$s.edge, 
+  birdhab$BRCR > 0)[, 2:1]
+rownames(br_creeper_table) <- (c("Forest Edge", "Inside Forest"))
+colnames(br_creeper_table) <- (c("Presence", "Absence"))
+br_creeper_table
+
+chisq_brcr <- chisq.test(br_creeper_table)
+chisq_brcr
+```
+Brown Creepers show a significant difference between habitat types (p = 1.386e-06), with a habitat preference for being neither in the forest edge nor inside the forest (559 birds).
+
+**Q3 (1 pt.): Show the R-code you can use to create a model fit (call it fit_species) of penguin body mass as predicted by penguin species.**
+
+```{r}
+require(palmerpenguins)
+fit_species = 
+  lm(
+    formula = body_mass_g ~ species,
+    data = penguins)
+```
+
+**Q4 (1 pt.): Show the R-code you can use to create a model fit (call it fit_sex) of penguin body mass as predicted by sex.**
+
+```{r}
+fit_sex = 
+  lm(
+    formula = body_mass_g ~ sex,
+    data = penguins)
+```
+
+**Q5 (1 pt.): Show the R-code you can use to create a model fit (call it fit_both) of penguin body mass as predicted by species and sex. This should be an interactive model, i.e. it should include a sex:species interaction.**
+
+```{r}
+Fit_both = 
+  lm(
+    formula = body_mass_g ~ species * sex, 
+    data = penguins)
+```
+
+**Q6 (1 pt.): Include a conditional boxplot corresponding to the grouping structure in your fit_species model.**
+
+```{r echo=TRUE}
+boxplot(formula = body_mass_g ~ species, data = penguins, main = "Penguin Body Mass by Species",
+        xlab = "Species", ylab = "Body Mass (g)", col = "royalblue1")
+```
+
+**Q7 (1 pt.): Include a conditional boxplot corresponding to the grouping structure in your fit_sex model.**
+
+```{r echo=TRUE}
+boxplot(formula = body_mass_g ~ sex, data = penguins, main = "Penguin Body Mass by Sex", 
+        xlab = "Sex", ylab = "Body Mass (g)", col = "steelblue2")
+```
+
+**Q8 (3 pts.): Include a conditional boxplot corresponding to the grouping structure in your fit_both model.Your group labels must all correspond to the correct box, be visible, and sensible.**
+
+```{r echo=TRUE}
+boxplot(formula = body_mass_g ~ sex * species, data = penguins, 
+        main = "Penguin Body Mass by Sex and Species",
+        names = c(" Female \n Adelie", "Male \n Adelie", "Female \n Chinstrap", "Male \n Chinstrap",
+                  "Female \n Gentoo", "Male \n Gentoo"),
+        xlab = "",
+        ylab = "Body Mass (g)", las = 2, col = "slategray1")
+```
+
+**Q9 (3 pts.): Based on the shapes of the boxes, which of the models (if any) do you think may have problems fulfilling the homogeneity assumption?**
+
+Based on the shape of these boxes, I don't think any of these models have issues fulfilling the homogeneity of variance. Eeach model appears to have a roughly equal spread of the data, and while the fit by sex doesn't have a central median, the overall spread and shape of the boxes, which are more indicative of the variance, are relatively similar. 
+
+**Q10 (1 pt.): State the null hypothesis of the Bartlett test.**
+
+The Bartlett test's null hypothesis is that there is no difference in variance between body mass for sex and species. 
+
+**Q11 (1 pt.): What was the p-value from the Bartlett test of homogeneity for observations grouped by species? You can round your answer to 4 decimal digits.**
+
+```{r}
+bartlett.test(body_mass_g ~ species, data = penguins)
+```
+
+**Q12 (1 pt.): What was the p-value from the Bartlett test of homogeneity for observations grouped by sex? You can round your answer to 4 decimal digits.**
+
+```{r}
+bartlett.test(body_mass_g ~ sex, data = penguins)
+```
+**Q13 (1 pt.): What was the p-value from the Bartlett test of homogeneity for observations grouped by both factors? You can round your answer to 4 decimal digits.**
+
+```{r}
+dat_groups = aggregate(
+  formula = body_mass_g ~ species * sex,
+  data = penguins,
+  FUN = c)
+str(dat_groups)
+
+dat_groups$body_mass_g
+
+bartlett.test(dat_groups$body_mass_g)
+```
+
+**Q14 (3 pts.): Based on the results of the Bartlett tests, do you anticipate any issues with heterogeneity in any of the models? Make sure you justify your response with the results of your tests.**
+
+Based on the Bartlett tests, there is not homogeneity of variance in the model analyzing flipper length and sex (p = 0.03194), but the other models show homogeneity of variance. The other models take normality of the data, and the small sample sizes, into account when calculating the variance across the data, which means there should be no issue with heterogeneity in those models. 
+
+**Q15 (5 pts.): Perform a graphical exploration of the dataset. Create the following plots and include them in your report. You may create separate figures, or combine them into one multi-panel figure.**
+**A barplot of counts of trees in each probability of failure class (column ProbabilityofFailure)**
+**A barplot of the counts of trees in each of the failure classes (column Failure_Standardized)**
+**A histogram of DBH**
+**A scatterplot of DBH (x-axis) and tree height (y axis)**
+
+```{r}
+require(here)
+FL_trees <- read.csv(here("data", "trees_FL.csv"))
+
+fail <- table(FL_trees$ProbabilityofFailure)
+stfail <- table(FL_trees$Failure_Standardized)
+par(mfrow = c(2,2))
+barplot(fail, main = "FL Trees Probability of Failure", xlab = "Number of Trees",
+        col = "seagreen3")
+barplot(stfail, main = "FL Trees Standardized Failture", xlab = "Failure Class",
+        col = "seagreen1")
+hist(FL_trees$DBH_in, main = "Histogram of DBH", xlab = "DBH", col = "seagreen")
+plot(FL_trees$DBH, FL_trees$HeighttoTop_ft, main = "DBH by Height (Ft)", xlab = "DBH", ylab = "Height (Ft)",
+     col = "springgreen4", pch = 8)
+```
+**Q16 (1 pt.): State the null hypothesis for the Kolmogorov-Smirnov test. Your answer should be in terms of the DBH of the two groups of trees.**
+
+There is no difference in distribution of DBH for each of the types of failure (branch, none, and whole). 
+
+**Q17 (1 pt.): What was the p-value of the test? Based on the evidence, do you think the distribution of DBH is the same for the two groups?**
+
+```{r}
+FL_treesn <- droplevels(subset(FL_trees, Failure_Standardized == "none"))
+FL_treesb <- droplevels(subset(FL_trees, Failure_Standardized == "branch"))
+FL_treesw <- droplevels(subset(FL_trees, Failure_Standardized == "whole"))
+
+ks.test(FL_treesn$DBH_in, FL_treesw$DBH_in)
+```
+Based on the Kolmororov-Smirnov test, the distribution of DBH across the failture types is not the same (p = 0.02125).
+
+**Q18 (1 pt.): Qualitatively describe the shape of the relationship betwen DBH and height. Is it linear? Curved? Monotonic?**
+
+The relationship between DBH and height looks roughly linear and monotonic, but it may have a slight curve at the base. Since it potentially has this curve, it's possibly non-parametric. relationship. 
+
+**Q19 (1 pt.): Given your answer to the previous question, which type of correlation coefficient is most appropriate?**
+
+The most appropriate correlation coefficient in Spearman's correlation coefficient. 
+
+**Q20 (1 pt.): What is the p-value? Do you conclude that the two variables are significantly correlated?**
+
+```{r}
+cor.test(FL_trees$DBH, 
+         FL_trees$HeighttoTop_ft,
+         use='complete.obs',
+         method = "spearman")
+```
+Based on the p-value from the Spearman's correlation test, there is a significant correlation between DBH and tree height (p < 2.2e-16).
+
+**Q21 (2 pts.): What was the value of the test statistic (X-squared)? What was the corresponding p-value?**
+
+
+     No Fail Fail
+  1    1239  168
+  2     670  219
+  3     421  206
+  4      53   63
+
+	Pearson's Chi-squared test
+
+data:  fl_table_2
+X-squared = 202.65, df = 3, p-value < 2.2e-16
+
+
+**Q22 (1 pt.): What is the value of the chi-square residual (rounded to the nearest whole number) for the count of failures in probability category 1?**
+
+-135.7
+
+**Q23 (1 pt.): Were there more, or fewer, tree failures than expected by chance in failure probability category #1?**
+
+There are fewer than expected by chance for failure probability in category #1. 
+
+**Q24 (1 pt.): Were there more, or fewer, tree failures than expected by chance in failure probability category #4?**
+
+There are more tree failures than expected by chance in failure probability in category #4.
+
+**Q25 (2 pts.): Given your answers to the previous two questions, do you conclude that the probability of failure rating system is effective?**
+
+This isn't effective because the residuals are pretty far off, you'd want them to be closer to zero. 
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,2 @@
+"0","plot(FL_trees$DBH, FL_trees$HeighttoTop_ft, main = ""DBH by Height (Ft)"", xlab = ""DBH"", ylab = ""Height (Ft)"","
+"0","     col = ""springgreen4"", pch = 8)"

@@ -1,0 +1,4 @@
+"0",""
+"0","hist(pen.boot$t, xlab = ""bootstrap t values"", "
+"0","     main = ""Distribution of Boostrapped Values of Flipper Length"", "
+"0","     col = ""skyblue"")"

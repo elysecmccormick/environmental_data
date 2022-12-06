@@ -1,0 +1,160 @@
+---
+title: "Lab 06"
+author: "Elyse McCormick"
+date: "`r Sys.Date()`"
+output: html_document
+Subtitle: Analysis of Environmental Data Eco 602
+---
+
+**Q1 (3 pts.): Show the R code you used to define your sse_mean() function. Include the following line before your function definition:**
+
+```{r}
+rm(list = ls())
+
+require(palmerpenguins)
+
+sse_mean = function(x) sd(x[!is.na(x)])/ sqrt(length(x[!is.na(x)]))
+    
+sse_mean(penguins$body_mass_g)
+sse_mean(mtcars$mpg)
+```
+
+**Q2 (4 pts.): Show the code you used to define your two_group_resample_diff() function.**
+
+```{r}
+dat_pen = subset(penguins, species != "Gentoo")
+x = dat_pen$flipper_length_mm
+n_1 = 68
+n_2 = 152
+
+dat_1 = sample(x, n_1, replace = TRUE)
+dat_2 = sample(x, n_2, replace = TRUE)
+
+diff_simulated = 
+  mean(dat_1, na.rm = TRUE) - mean(dat_2, na.rm = TRUE)
+
+print(diff_simulated)
+
+two_group_resample_diff <- function(x, n_1, n_2)
+{dat_1 = sample(x[!is.na(x)], n_1, replace = TRUE)
+ dat_2 = sample(x[!is.na(x)], n_2, replace = TRUE)
+ diff_simulated = 
+  mean(dat_1, na.rm = TRUE) - mean(dat_2, na.rm = TRUE)
+   return(diff_simulated)}
+
+set.seed(54321)
+two_group_resample_diff(dat_pen$flipper_length_mm, 68, 152)
+```
+
+
+**Q3 (2 pts.): Does your function perform Monte Carlo or bootstrap resampling, i.e. does it simulate a null or an alternative hypothesis? You may want to review your answer after you complete the rest of the lab questions.**
+
+It performs bootstrap resampling, because it simulates an alternative hypothesis. After completing the lab this is slightly easier to see, because it allows you to run a t-test and  understand how the two-group resample is affected, but it essentially lets you see real patterns in the data through resampling all the data in whole columns and maintaining the patterns that occur within those data. 
+
+
+**Q4 (1 pt.): Create a histogram of the resampled differences of means.**
+
+```{r echo=TRUE}
+n = 2000
+mean_differences = c()
+for (i in 1:n)
+{
+  mean_differences = c(
+    mean_differences,
+    two_group_resample_diff(dat_pen$flipper_length_mm, 68, 152)
+  )
+}
+hist(mean_differences, main = "Resampled Differences of Penguin Flipper Length", col = "midnightblue")
+```
+
+**Q5 (2 pts.): How many of your resampled differences of means had a magnitude greater than 5.8? Assume that we are doing a 2-sided test: we don’t care which species has longer flippers, we only want to know if they are different. Include the R code you used to check the number of differences greater than 5.8.**
+
+```{r}
+sum(abs(mean_differences) > 5.8)
+```
+**Q6 (2 pts.): Given a p value of less than 1 per 10 million, how many simulations do you think you would have to do to see a difference in mean flipper length equal to or greater than 5.8 mm?**
+
+You would have to run more than 10 million tests to see differences, the p value is showing that you would have a 1 in 10 million likelihood of seeing that difference. So to get more than 1 in 10 million, you would have to run multiples of 10 million to see the differences. 
+
+**Q7 (1 pt.): Include a boxplot of your chosen variable in your report.**
+
+```{r echo=TRUE}
+dat_pen = droplevels(subset(penguins, species != "Gentoo"))
+boxplot(
+  bill_length_mm ~ species, data = dat_pen,
+  xlab = "Species",
+  ylab = "Bill Length (mm)",
+  col = "lightskyblue")
+```
+
+**Q8 (3 pts.): Report the group means and difference between the means.**
+
+```{r}
+t.test(dat_pen$bill_length_mm ~ dat_pen$species)
+
+t_test = t.test(dat_pen$bill_length_mm ~ dat_pen$species)
+
+t_test$estimate
+
+diff_observed = round(diff(t_test$estimate), digits = 3)
+print(diff_observed, digits = 3)
+```
+
+Adelie means: 38.79
+Chinstrap means: 48.83
+Difference between the means: 10
+
+**Q9 (4 pts.): Interpret the p-value from the t-test output in plain, non-technical English that a non-statistician would understand.**
+
+p < 2.2e-16
+
+This p value indicates that there is a detectable difference in bill length between Adelie and Chinstrap penguins. Based on the p value and the average lengths, chinstrap penguins have longer bills than Adelie penguins.
+
+**Q10 (2 pts.): How many differences in means were greater than diff_crit? Remember to treat this as a 2-tailed test.**
+
+```{r}
+agg_means = aggregate(
+  bill_length_mm ~ species, 
+  data = dat_pen, 
+  FUN = "mean", 
+  na.rm = TRUE)
+diff_crit = diff(agg_means[, 2])
+
+agg_means
+
+diff_crit
+
+#Using the two_group_resample_diff function
+set.seed(54321)
+two_group_resample_diff(dat_pen$bill_length_mm, 38.79, 48.83)
+
+```
+
+**Q11 (1 pt.): Include a histogram of your simulation results in your report. Make sure it has appropriate title and labels.**
+
+#Resampling with a histogram and mean differences
+
+```{r echo=TRUE}
+n = 2000
+mean_differences = c()
+for (i in 1:n)
+{
+  mean_differences = c(
+    mean_differences,
+    two_group_resample_diff(dat_pen$bill_length_mm, 68, 152)
+  )
+}
+hist(mean_differences, main = "Resampled Differences of Penguin Bill Length", col = "lightsteelblue")
+
+sum(abs(mean_differences) > 1.2)
+```
+
+
+
+
+
+
+
+
+
+

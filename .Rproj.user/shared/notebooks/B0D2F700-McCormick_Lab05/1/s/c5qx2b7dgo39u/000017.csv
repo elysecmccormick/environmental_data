@@ -1,0 +1,4 @@
+"0","curve("
+"0","  ricker_fun(x, 50, 0.3), col = ""red"", lty = ""dotted"","
+"0","  from = 0, to = 50, ylim = c(0, 100), add = TRUE, main = ""Ricker Functions Test Plot"","
+"0","  ylab = ""f(x)"", xlab = ""x"")"

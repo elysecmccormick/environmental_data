@@ -1,0 +1,4 @@
+"0","require(palmerpenguins)"
+"0","pen_fem = subset(penguins, sex == ""female"")"
+"0","boxplot(pen_fem$body_mass_g ~ pen_fem$species, xlab = ""Species"", ylab = ""Body Mass (g)"", "
+"0","        col = ""skyblue"")"

@@ -1,0 +1,284 @@
+---
+title: 'Lab 4: Uncertainty and Error'
+author: "Elyse McCormick"
+date: '`r Sys.Date()`'
+output: html_document
+subtitle: Analysis of Environmental Data
+---
+
+### Vector Code
+
+**Q1 (1 pt.) Show the code you used to create your vectors.**
+
+```{r}
+n_17 <- 17
+n_30 <- 30
+n_300 <- 300
+n_3000 <- 3000
+avg <- 10.4
+std <- 2.4
+
+norm_17 <- rnorm(n = n_17, mean = avg, sd = std)
+norm_30 <- rnorm(n = n_30, mean = avg, sd = std)
+norm_300 <- rnorm(n = n_300, mean = avg, sd = std)
+norm_3000 <- rnorm(n = n_3000, mean = avg, sd = std)
+```
+
+**Q2 (2 pts.) Include the R code you used to create your figure. Your answer should include code that builds the figure as well as saves it to a file.**
+
+```{r}
+par(mfrow = c(2,2))
+hist(norm_17, xlab = "Elements", main = "Dispersal of 17 Elements")
+hist(norm_30, xlab = "Elements", main = "Dispersal of 30 Elements")
+hist(norm_300, xlab = "Elements", main = "Dispersal of 300 Elements")
+hist(norm_3000, xlab = "Elements", main = "Dispersal of 3000 Elements")
+
+require(here)
+png(
+  filename = here("HistogramsofElementDispersal.png"),
+  width = 1500, height = 1600, 
+  res = 180, units = "px")
+
+par(mfrow = c(2,2))
+hist(norm_17, xlab = "Elements", main = "Dispersion of 17 Elements")
+hist(norm_30, xlab = "Elements", main = "Dispersion of 30 Elements")
+hist(norm_300, xlab = "Elements", main = "Dispersion of 300 Elements")
+hist(norm_3000, xlab = "Elements", main = "Dispersion of 3000 Elements")
+dev.off()
+
+```
+
+**Q3 (4 pts.) Upload your lab_04_hist_01.png file to Moodle. Make sure you double check the image size and resolution requirements.**
+
+**Q4 (2 pts.) Qualitatively describe the differences among the histograms.**
+
+As the number of elements present in the histogram increases, the shape of the histogram improves towards a normal bell curve. For the histogram with 17 elements, it's uneven and *barely* skewed right, for the histogram with 30 elements, it is slightly skewed left. For the histogram with 300 elements, it centers pretty well around 10 with a rough bell curve that's slightly right-heavy, and for the histogram with 3000 it centers almost perfectly on 10 with a perfect bell curve.
+
+**Q5 Explain why the shapes of the histograms are different.**
+
+With increasing sample size, you can get a better idea of the distribution of your data. So, as the number of elements present in each histogram increases, the shape improves towards a normal distribution.
+
+**Q6 (1 pt) What are the parameters and their values for the standard Normal distribution?**
+
+In a standard Normal distribution, the mean centers on 0, and the standard deviation is 1.
+
+**Q7 (2 pts.) Include the R code you used to create your figure. Your answer should include code that builds the figure as well as saves it to a file.**
+
+```{r}
+x = seq(0.8, 20, length.out = 1000)
+y = dnorm(x, mean = 10.4, sd = 2.4)
+
+plot(x, y, main = "Standard Normal PDF: mean = 10.4, sd = 2.4", type = "l", xlim = c(0.4, 20.4))
+```
+
+**Q8. (2 pts.) Upload norm_1.svg (or norm_1.pdf).**
+
+```{r}
+require(here)
+svg("norm_1.svg")
+dev.off()
+```
+
+**Q9. (3 pts.) Show the R code you used to create one of the random datasets in your figure.**
+
+```{r}
+par(mfrow = c(2,2))
+set.seed(119)
+n_pts = 119
+x_min = 1
+x_max = 119
+
+guess_x = 0
+guess_y = 0
+guess_slope = 0.02
+
+x_random = runif(n = n_pts, min = x_min, max = x_max)
+
+y_random = rnorm(n = n_pts)
+
+dat_random = data.frame(x = x_random, y = y_random)
+
+plot(y ~ x, data = dat_random, pch = 8, col = "steelblue1", main = "Data for Scatterplot 1" )
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+
+curve(line_point_slope(x, guess_x, guess_y, guess_slope), add = T)
+
+n_samples = 1211
+pop_sd = 800
+pop_mean = 1905
+
+dat_1 = rnorm(n = n_samples, mean = pop_mean, sd = pop_sd)
+hist(dat_1, xlab = "X", main = "Data 2 Histogram", col = "mediumvioletred")
+
+set.seed(200)
+n_pts = 124
+x_min = 1
+x_max = 124
+
+guess_x = 0
+guess_y = 0
+guess_slope = 0.02
+
+x_random = runif(n = n_pts, min = x_min, max = x_max)
+
+y_random = rnorm(n = n_pts)
+
+dat_random = data.frame(x = x_random, y = y_random)
+
+plot(y ~ x, data = dat_random, pch = 10, col = "midnightblue", main = "Data for Scatterplot 3" )
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+
+set.seed(500)
+n_pts = 350
+x_min = 1
+x_max = 350
+
+guess_x = 0
+guess_y = 0
+guess_slope = 0.02
+
+x_random = runif(n = n_pts, min = x_min, max = x_max)
+
+y_random = rnorm(n = n_pts)
+
+dat_random = data.frame(x = x_random, y = y_random)
+
+boxplot(dat_random$x, ylab = "x Values", main = "Boxplot 4", col = "mediumspringgreen")
+
+```
+
+**Q.11 (3 pts.) Show the R code you used to create one of the random datasets in your figure.**
+
+```{r}
+set.seed(119)
+n_pts = 119
+x_min = 1
+x_max = 119
+
+guess_x = 0
+guess_y = 0
+guess_slope = 0.02
+
+x_random = runif(n = n_pts, min = x_min, max = x_max)
+
+y_random = rnorm(n = n_pts)
+
+dat_random = data.frame(x = x_random, y = y_random)
+
+plot(y ~ x, data = dat_random, pch = 8, col = "steelblue1", main = "Data for Scatterplot 1" )
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+
+curve(line_point_slope(x, guess_x, guess_y, guess_slope), add = T)
+```
+
+**Q.12 (2 pts.) Upload an image file of your figure. It may be in png (raster graphics), svg (vector graphics), or pdf (vector graphics) format.Check out the corresponding functions png(), pdf(), and svg() for info.**
+
+**Q.13 2 pts.) Paste the R code you used to create create the columns of predicted values and residuals.**
+
+```{r}
+set.seed(119)
+n_pts = 119
+x_min = 1
+x_max = 119
+
+guess_x = 0
+guess_y = 0
+guess_slope = 0.02
+
+x_random = runif(n = n_pts, min = x_min, max = x_max)
+
+y_random = rnorm(n = n_pts)
+
+dat_random = data.frame(x = x_random, y = y_random)
+
+plot(y ~ x, data = dat_random, pch = 8, col = "steelblue1", main = "Data for Scatterplot 1" )
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+
+curve(line_point_slope(x, guess_x, guess_y, guess_slope), add = T)
+
+line_point_slope(dat_random$x, guess_x, guess_y, guess_slope)
+
+dat_random$y_predicted = line_point_slope(dat_random$x, guess_x, guess_y, guess_slope)
+
+dat_random$resids = dat_random$y - dat_random$y_predicted
+
+sum(dat_random$resids)
+
+sum(abs(dat_random$resids))
+
+par(mfrow = c(1,2))
+plot( x = dat_random$y, xlab = "Observed", y = dat_random$resids, ylab = "Residuals", pch = 8, col= "steelblue1")
+
+hist(dat_random$resids, xlab = "Residuals", main = "Residuals", col = "steelblue1")
+```
+
+**(3 pts.) In your report, include the two following figures: A histogram of the model's residuals; A scatterplot of your model's predicted values (on the x-axis) and residuals (on the y-axis).**
+
+```{r fig.height=4, fig.width=10}
+par(mfrow = c(1,3))
+plot(y ~ x, data = dat_random, pch = 8, col = "steelblue1", main = "Data for Scatterplot 1" )
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+
+curve(line_point_slope(x, guess_x, guess_y, guess_slope), add = T)
+
+par(mfrow = c(1,2))
+plot( x = dat_random$y, xlab = "Observed", y = dat_random$resids, ylab = "Residuals", pch = 8, col= "steelblue1")
+
+hist(dat_random$resids, xlab = "Residuals", main = "Residuals", col = "steelblue1")
+
+```

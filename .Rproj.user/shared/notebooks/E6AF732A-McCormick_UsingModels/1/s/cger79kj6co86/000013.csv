@@ -1,0 +1,2 @@
+"0","par(mfrow = c(1,2))   "
+"0","hist(dat_adelie$flipper_length_mm, main = ""Adelie Flipper Length"", xlab = ""Flipper Length (mm)"", col = ""royalblue4"")"

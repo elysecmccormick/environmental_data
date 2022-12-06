@@ -1,0 +1,8 @@
+"0","exp_fun = function(x, a, b) "
+"0","{"
+"0","  return(a * exp(-b * x))"
+"0","}"
+"0","curve("
+"0","  exp_fun(x, 1, -1/10), from = 0, to = 10, add = FALSE,"
+"0","  main = ""Exponential Function Test Plot"","
+"0","  xlab = ""x"", ylab = ""f(x)"")"

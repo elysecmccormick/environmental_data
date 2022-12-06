@@ -1,0 +1,94 @@
+---
+title: "Data Exploration and Deterministic Functions"
+author: "Elyse McCormick"
+date: "`r Sys.Date()`"
+output: html_document
+subtitle: Analysis of Environmental Data
+---
+
+**Q1. Create histograms for the three terrain variables: elevation, slope, and aspect.Plot all three histograms in one figure and include it in your report.**
+
+```{r}
+require("psych")
+require("here")
+dat.hab <- read.csv(here("data", "hab.sta.csv"))
+par(mfrow = c(1, 3))
+hist(dat.hab$elev, xlab = "Elevation", main = "Elevation Distribution", col = adjustcolor(rgb(0,1,1), alpha.f = 0.2), pch = 16, cex = 2)
+hist(dat.hab$slope, xlab = "Slope", main = "Slope Distribution", col = adjustcolor(rgb(1,1,0), alpha.f = 0.2), pch = 16, cex = 2)
+hist(dat.hab$aspect, xlab = "Aspect", main = "Aspect Distribution", col = adjustcolor(rgb(0.5,0,1), alpha.f = 0.2), pch = 16, cex = 2)
+```
+
+**Q2. Consider the distribution of elevations at the bird census sample sites. Interpret the shape of the elevation histogram in non-technical language that a non-scientist audience would understand. Some points to consider:Are there more high- or low-elevation sampling sites? Is there an even distribution of sampling site elevation? Your answer should be 1-2 short paragraphs in length.**
+
+Elevation is not evenly sampled across field sites for collecting bird data. There are more low elevation sites than high elevation sites, with the sites at the highest elevation being almost unsampled. There is an abundance of sampling at roughly 400 ft, with over 150 sampling sites, likely because this is still an easy elevation to reach for the field researchers. More even sampling across elevations would be idea in order to have a more accurate measure of what is happening at different elevations.
+
+**Q3. What are the units of slope in this dataset?**
+
+In this dataset, slope is measured as percent slope (%) according to the metadata file.
+
+**Q4. Consider the distribution of slopes at the bird census sample sites.Interpret the shape of the slope histogram in non-technical language that a non-scientist audience would understand. Some points to consider:Are most sample sites flat? Is there an even mixture of steep and shallow slopes? Your answer should be 1-2 short paragraphs in length.**
+
+This histogram shows that the slopes at the bird census sampling sites are relatively evenly sampled. Most sample sites are not flat, in fact the middle of the histogram falls at around 50% slope, meaning that most sites have roughly 50% slope. There's a roughly even mix of steep and shallow slopes, as there is a normal distribution across the histogram. Sites with higher or lower slopes were sampled less than sites with intermediate slopes.
+
+**Q5. Briefly define aspect, describing the units used in this dataset.**
+
+In geography, aspect is the direction that a terrain surface is facing. In this dataset, aspect is shown in 360 degrees, to show a full radius of an area, and then determine which cardinal direction the terrain faces based on where in the circle it's located.
+
+**Q6. Consider the distribution of aspect at the bird census sample sites. Interpret the shape of the aspect histogram in non-technical language that a non-scientist audience would understand. Some points to consider: Do the sampling sites tend to be on north-facing slopes? South-facing? Evenly distributed? Your answer should be 1-2 short paragraphs in length.**
+
+This histogram shows that the distribution of aspect at the bird census sample sites is relatively even across directions, as noted by the "flat top" on the histogram. There was roughly equal sampling in all directions (North, South, East, and West), with just slightly fewer in the south than in all other directions.
+
+**Q7. Create scatterplots of total basal area and each of the the terrain variables: elevation, slope, and aspect. Basal area should be on the y-axis. Visually inspect the plots and fit a linear function to each terrain variable. Review the linear model parameterization section of the assignment walkthrough if needed.**
+
+```{r}
+par(mfrow = c(1, 3))
+plot(x = dat.hab$elev, xlab = "Elevation", y = dat.hab$ba.tot, ylab = "Total Basal Area (m^2)",
+     main = "Total Basal Area Across Elevation", col = adjustcolor(rgb(0,1,1), alpha.f = 0.2), pch = 16, cex = 2)
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+curve(line_point_slope(x, x1 = 1, y1 = 1.25, slope = 0.1), add = TRUE)
+plot(x = dat.hab$slope, xlab = "Slope", y = dat.hab$ba.tot, ylab = "Total Basal Area (m^2)",
+     main = "Total Basal Area Across Slopes", col = adjustcolor(rgb(1,1,0), alpha.f = 0.2), pch = 16, cex = 2)
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+curve(line_point_slope(x, x1 = 3.5, y1 = 1.25, slope = 0.4), add = TRUE)
+plot(x = dat.hab$aspect, xlab = "Aspect", y = dat.hab$ba.tot, ylab = "Total Basal Area (m^2)",
+     main = "Total Basal Area Across Aspects", col = adjustcolor(rgb(0.5,0,1), alpha.f = 0.2), pch = 16, cex = 2)
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+curve(line_point_slope(x, x1 = 3.5, y1 = 1.25, slope = 0.2), add = TRUE)
+```
+
+**Q8. For each terrain variable (elevation, slope, aspect), describe the relationship you observe and your model fit. You should consider: Is there a noticeable association? If so, is it linear? Based on a visual assessment, is your linear model a good fit for the data, why or why not?**
+
+For the elevation scatterplot, there is what appears to be a positive linear association between elevation and total basal area, or tree cover. This doesn't seem like a great fit for the data, because there seem to be some outliers that are affecting the slope and increasing it's positive direction, otherwise it looks like most of the data points fall in a cluster at the base of the plot. For the slope scatterplot, there is a very weak, debatably positive linear relationship between the slope and the total basal area. There seems to be no relationship here, which strikes me as an okay model fit since the close of points clusters at the bottom. However, it doesn't pass through the center of the plot, which means it's possibly off a little bit in fit. Finally, for the aspect plot, there seems to be a positive linear relationship between aspect and total basal area. Based on the shape of the data points, I don't see how this could be a good fit for the data, since they're falling in a random cloud at the base of the plot, they're just slightly more spread out than the other two plots.

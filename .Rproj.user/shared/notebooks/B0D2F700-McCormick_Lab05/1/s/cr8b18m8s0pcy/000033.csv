@@ -1,0 +1,6 @@
+"0","ricker_fun = function(x, a, b) "
+"0","{"
+"0","  return(a * x * exp(-b * x))"
+"0","}"
+"0","curve("
+"0","  ricker_fun(x, 0.003, 1/300), from = 0, to = 1500, add = TRUE)"

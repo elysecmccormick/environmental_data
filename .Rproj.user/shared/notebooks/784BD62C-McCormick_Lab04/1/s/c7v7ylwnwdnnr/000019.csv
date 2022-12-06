@@ -1,0 +1,3 @@
+"0",""
+"0","par(mfrow = c(2,2))"
+"0","hist(norm_17, xlab = ""Elements"", main = ""Dispersion of 17 Elements"")"

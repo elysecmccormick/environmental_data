@@ -1,0 +1,154 @@
+---
+title: 'Lab 10: ANOVA'
+author: "Elyse McCormick"
+date: "`r Sys.Date()`"
+output: html_document
+subtitle: Analysis of Environmental Data
+---
+
+**Q1 (8 pts.): Submit the code you used to build your ANOVA by hand. Make sure you use the code template so that you use the same variable names as those which we’ll use for the grading.**
+
+```{r}
+rm(list = ls())
+
+require(here)
+
+rope = read.csv(here("data", "rope.csv"))
+
+rope$rope.type = factor(rope$rope.type)
+
+n_obs = length(rope$rope.type)
+n_groups = length(unique(rope$rope.type))
+
+ss_tot = sum( (rope$p.cut - mean(rope$p.cut) )^2 )
+df_tot = n_obs - 1
+
+agg_sum_sq_resids = aggregate(
+  x = rope$p.cut,
+  by = list(rope$rope.type),
+  FUN = function(x) sum( (x - mean(x) )^2 ))
+
+ss_within = sum(agg_sum_sq_resids$x)
+
+df_within = n_obs - 6
+
+ss_among = ss_tot - ss_within
+
+df_among = n_groups - 1
+ms_among = ss_among / (n_groups - 1)
+ms_within = ss_within / (n_obs - n_groups)
+
+f_ratio = ms_among / ms_within
+f_pval = 1 - pf(f_ratio, df1 = df_among, df2 = df_within)
+
+```
+
+**Q2 (1 pt.): Examine the conditional boxplot in the Partitioning Variance: Within-Group section of the walkthrough. Based on the figure, do you think there are equal variances among the groups?**
+
+There are not equal variances among the groups in this boxplot. Since variance in a boxplot is shown by the whisker length of a boxplot from tip to tip, and the whisker lengths are highly variable, meaning that there are not equal variances between these groups.
+
+**Q3 (1 pt.): Conduct a Bartlett test to assess the homogeneity of variances of the percent cut among the rope type groups.**
+
+```{r}
+bartlett.test(p.cut ~ rope.type, data = rope)
+```
+
+**Q4 (2 pts.): Given your graphical assessment (question 2) and the Bartlett test, do you think an ANOVA-type analysis is appropriate on the raw data? Explain why or why not.**
+
+No, an ANOVA is not an appropriate test. An ANOVA should be used when parametric assumptions, such as equal variance, are met. Here, both the boxplot and the Bartlett test (p < 0.05) indicate that the variance is not equal. As such, this is not the appropriate test. 
+
+**Q5 (1 pt.): Which rope type is the base case?**
+
+"BLAZE"
+
+**Q6 (1 pt.): What is the mean percent cut of the base case rope? Show your calculation using value(s) from the model coefficient table.**
+
+intercept estimate + base case rope = mean percent cut
+0.36714 + 0 = 0.36714
+
+**Q7 (1 pt.): What is the mean percent cut rope type XTC? Show your calculation using value(s) from the model coefficient table.**
+
+intercept estimate + XTC rope type estimate = mean percent cut rope XTC
+0.36714 + -0.10164 = 0.2655
+
+**Q8 (2 pts.): Use the residuals() function to retrieve the residuals from your model and perform an overall normality test. Report the p-value.**
+
+```{r}
+fit_rope_1 = lm(p.cut ~ rope.type, data = rope)
+residuals(fit_rope_1)
+shapiro.test(residuals(fit_rope_1))
+```
+
+p = 7.238e-07
+
+**Q9 (1 pt.): Do your model residuals meet the normality assumption, and how do you know?**
+
+Since our p value is less than 0.05, we reject the null hypothesis of a normal distribution. This means that our model does not meet normality assumptions. 
+
+**Q10 (4 pts.): Perform normality tests on the residuals within each group. How many groups meet the normality assumption? Optional challenge: identify which rope types meet the assumption.**
+
+There are three rope types that meet the assumption of normality: BS, PI, and SB. BLAZE, VEL, and XTC do not meet the assumptions of normality. 
+
+**Q11 (1 pt.): Given the results of your tests for residual normality, do you think that a one-way Analysis of Variance is appropriate for this dataset?**
+
+No. since only half the groups meet the assumption of normality, that makes most of the dataset non-parametric, and thus, means that it does not fit an ANOVA. 
+
+**Q12 (2 pts.): Create a conditional boxplot of the female penguins: body mass conditioned on species.**
+
+```{r echo=TRUE}
+require(palmerpenguins)
+pen_fem = subset(penguins, sex == "female")
+boxplot(pen_fem$body_mass_g ~ pen_fem$species, xlab = "Species", ylab = "Body Mass (g)", 
+        col = "skyblue")
+```
+
+**Q13 (1 pt.): Based on the boxplot, do you anticipate any problems with residual normality, or homogeneity of variances? Why or why not?**
+
+There shouldn't be any issues with normality or homogeneity of variances. These boxplots all have relatively equal midlines, as well as relatively equal whiskers, indicating that the center of the data is relatively normal and the variance is low. 
+
+**Q14 (2 pts.): Conduct a Bartlett test for homogeneity of variances of body mass grouped by species. Hint: use the formula notation. Report the p-value. Is the homogeneity assumption met? Why or why not?**
+
+```{r}
+bartlett.test(body_mass_g ~ species , data = pen_fem)
+```
+Our null hypothesis for the Bartlett test states that the variance between groups is equal. Since our p value is greater than 0.05 (p = 0.9056), we can say this fails to reject the null hypothesis and our assumption of homogeneity of variance is met. 
+
+**Q15 (2 pts.): Fit a linear model of body mass (the response) and species (the predictor) using the female penguin data. Conduct a test for normality of the residuals. Report the p-value. Is the residual normality assumption met? Why or why not?**
+
+```{r}
+lmodel = lm(body_mass_g ~ species, data = pen_fem)
+summary(lmodel)
+shapiro.test(lmodel$residuals)
+```
+
+The p value is larger than our alpha value of 0.05 (p = 0.3639), so we meet the normality assumption, and fail to reject the null hypothesis.
+
+**Q16 (2 pts.): Conduct a Tukey HSD post-hoc test on your model. Which pair or pairs of species have significantly different body masses?**
+
+```{r}
+lmodel <- lm(body_mass_g ~ species, data = pen_fem)
+penms_hsd <- TukeyHSD(aov(lmodel))
+class(penms_hsd)
+round(penms_hsd$species, digits = 4)
+```
+There is a significant difference in body mass between all the species, with p-values well below 0.05. 
+
+**Q17 (2 pts.): Describe how your HSD rest results match, or do not match, the graphical insight from the conditional boxplot.**
+
+This agrees with the conditional boxplot because it shows that while the variances were roughly equal, the means were not in the same places. The post-hoc testing shows that this is true, the means are significantly different, meaning the visual intuition from the boxplot was correct. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,5 @@
+"0",""
+"0","dat_habitat = read.csv("
+"0","  here(""data"", ""hab.sta.csv"")"
+"0",")"
+"0","head(dat_habitat)"

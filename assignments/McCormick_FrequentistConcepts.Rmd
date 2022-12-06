@@ -1,0 +1,100 @@
+---
+title: "Frequentist Concepts"
+author: "Elyse McCormick"
+date: "`r Sys.Date()`"
+output: html_document
+subtitle: Analysis of Environmental Data
+---
+
+**Q1 (2 pts.): What is the probability of observing a count of exactly 3 successes in a binomial distribution with parameters n = 4 and p = 0.75?**
+
+```{r}
+dbinom(4, size = 3, prob = 0.75)
+```
+
+**Q2 (2 pts.): What is the probability of observing a count of 3 successes or fewer in a binomial distribution with parameters n = 4 and p = 0.75?**
+
+```{r}
+pbinom(4, size = 3, prob = 0.75)
+```
+
+**Q3 (2 pts.): What is the probability of observing more than 3 successes in a binomial distribution with parameters n = 5 and p = 0.75?**
+
+```{r}
+pbinom(5, size = 3, prob = 0.75)
+```
+
+**Q4 (2 pts.): - What is the probability of observing a value of less than 1.2 from a normally-distributed population with mean = 2 and standard deviation = 2?**
+
+```{r}
+pnorm(1.2, mean = 2, sd = 2)
+```
+
+**Q5 (2 pts.): - What is the probability of observing a value of greater than 1.2 from a normally-distributed population with mean = 2 and standard deviation = 2?**
+
+```{r}
+pnorm(2.75, mean = 2, sd = 2)
+```
+
+**Q6 (4 pts.): - What is the probability of observing a value between 1.2 and 3.2 from a normally-distributed population with mean = 2 and standard deviation = 2?**
+
+```{r}
+pnorm(3.2, mean = 2, sd = 2) - pnorm(1.2, mean = 2, sd = 2)
+```
+
+**Q7 (2 pts.): Describe how the shape of the histogram changes as you continue to press the sample button.**
+
+As you continue to press the sample button, you see a more and more skewed distribution that ultimately settles into a skewed distribution that matches the curve above, no matter how many times you press the sample button. There are at least some data that fill in through the whole length of the very skinny tail, even if they only come in a 1 or 2%. 
+
+**Q8 (2 pts.): Describe how the shape of the histogram changes as you continue to press the sample button.**
+
+Similar to when the number of samples was 1, the histogram settles into a left-skewed distribution that matches the curve above, no matter how many times you press the sample button. Similarly to the scenario where sample = 1, the data fill in the whole length of the curve out to the skinny tail.
+
+**Q9 (2 pts.): Describe how the shape of the histogram changes as you continue to press the sample button.**
+
+In this scenario, where the samples = 15, the shape still matches a left skew to an extent, but it has almost no skinny tail, in fact, it's like a small normal distribution at the far left edge of the plot. 
+
+**Q10 (2 pts.): Why is there such a drastic change in the shape of the sampling distribution when you change the sample size from 1 to 2?**
+
+Because you're drastically increasing how many samples you include in your data set, which makes the data's mean settle hopefully closer to a true mean, which doesn't have as much variation as it would when you have a much smaller sample size. 
+
+**Q11 (2 pts.): What are the two main factors that determine the width of the sampling distribution of the mean?**
+
+The sample size and the standard deviation. The higher your sample size, the less the samples (and thus the mean) will vary from each other. That forces the width of the distribution to narrow with increasing sample size.
+
+**Q12 (2 pts.): How many 3-character words are possible?**
+
+```{r}
+25*25*25
+```
+
+**Q13 (2 pts.): How many books would the Library contain if you added one additional position to the book size (i.e. one extra letter on the last page)? Express your answer in terms of B.**
+
+If you only wanted to add one letter to the number of position possibilities, I think you'd do it like this:
+
+(410*40*80)+1 = 1,312,001
+
+So, that would mean that B = 25^1,312,001, which, when calculated in R, shows that B is infinite. 
+
+```{r}
+(410*40*80)+1
+25^1312001
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

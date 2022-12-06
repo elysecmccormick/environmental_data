@@ -1,0 +1,2 @@
+"0","plot(x = dat.hab$aspect, xlab = ""Aspect"", y = dat.hab$ba.tot, ylab = ""Total Basal Area (m^2)"","
+"0","     main = ""Total Basal Area Across Aspects"", col = adjustcolor(rgb(0.5,0,1), alpha.f = 0.2), pch = 16, cex = 2)"

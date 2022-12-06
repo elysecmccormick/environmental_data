@@ -1,0 +1,1 @@
+"0","aggregate(body_mass_g ~ species*sex, data = penguins, FUN = mean)"

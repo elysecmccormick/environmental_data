@@ -1,0 +1,4 @@
+"0","dat_bird = read.csv("
+"0","  here(""data"", ""bird.sta.csv"")"
+"0",")"
+"0","head(dat_bird)"

@@ -1,0 +1,165 @@
+---
+title: 'Lab 3: Data Exploration and Deterministic Functions'
+author: "Elyse McCormick"
+date: "2022-09-21"
+output:  html_document
+subtitle: Analysis of Environmental Data
+---
+
+### Basal Area
+
+**Q1 (1 pt.): What is basal area, and how is it measured?**
+
+Basal area is the term used for the average amount of area taken up by tree stems, usually noted in acres. It is the total cross-sectional area in a stand of trees, and is measured at chest height. It's a great way to get a sense of tree cover in a given area.
+
+**Q2 (2 pts.): Include a figure of your terrain/basal area pair plot.**
+
+```{r}
+require(psych)
+require(here)
+dat_bird = read.csv(
+  here("data", "bird.sta.csv")
+)
+head(dat_bird)
+
+dat_habitat = read.csv(
+  here("data", "hab.sta.csv")
+)
+head(dat_habitat)
+
+dat_all <- data.frame(merge(dat_bird, dat_habitat))
+names(dat_all)
+pairs.panels (dat_all[, c("elev", "slope", "aspect", "ba.tot")])
+```
+
+### Bird Species 1
+
+**Q3 (1 pt.): Include a figure of your logistic function plot. Your figure must include the name of the bird species, appropriate title, axes, etc.**
+
+```{r}
+gf <- dat_all$AMGO
+gf > 1
+as.numeric(gf > 1)
+amgo_present_absent <- as.numeric(gf > 1)
+plot(x = dat_all$elev, y = amgo_present_absent)
+
+
+get_logistic_param_a = function(slope, midpoint)
+{
+  b = slope / 4
+  return (-midpoint * (slope / 4))
+}
+
+get_logistic_param_b = function(slope)
+{
+  return (slope / 4)
+}
+
+logistic = function(x, a, b)
+{
+  val = exp(a + b * x)
+  return(val / (1 + val))
+}
+
+
+logistic_midpoint_slope = function(x, midpoint, slope)
+{
+  b = get_logistic_param_b(slope)
+  a = get_logistic_param_a(slope, midpoint)
+  return(logistic(x, a, b))
+}
+
+plot(x = dat_all$ba.tot, xlab = "Total Basal Area (m^2/hect)",
+     y = amgo_present_absent, ylab = "American Goldfinch Presence", 
+     main = "American Goldfinch Presence within a Stand",
+     col = adjustcolor(rgb(1,1,0), alpha.f = 0.2), pch = 16, cex = 2)
+curve(logistic_midpoint_slope(x, midpoint = 30, slope = -1), add = TRUE)
+
+
+```
+
+**Q4 (3 pts.): Qualitatively describe the bird's presence/absence patterns in terms of basal area (or your other chosen predictor). Your answer should make reference to your fitted logistic model plot. Some questions you might consider are:**
+
+**- Does the bird species seem to prefer areas with high or low tree cover?** **- Does the bird species prefer low or high elevations? (for example, if you used elevation instead of basal area)** **- Does a logistic model seem like a good fit?**
+
+American Goldfinches seem to prefer open areas as opposed to areas with high tree cover. According to this model, the trend shows goldfinches decreased with the Total Basal Area. The logistic model is a good fit for this data since it is binary data.
+
+### Bird Species 2
+
+**Q5 (1 pt.): Include a figure of your logistic function plot. Your figure must include the name of the bird species, appropriate title, axes, etc.**
+
+```{r}
+pf <- dat_all$PUFI
+pf > 1
+as.numeric(pf > 1)
+pufi_present_absent <- as.numeric(pf > 1)
+plot(x = dat_all$elev, y = pufi_present_absent)
+
+
+get_logistic_param_a = function(slope, midpoint)
+{
+  b = slope / 4
+  return (-midpoint * (slope / 4))
+}
+
+get_logistic_param_b = function(slope)
+{
+  return (slope / 4)
+}
+
+logistic = function(x, a, b)
+{
+  val = exp(a + b * x)
+  return(val / (1 + val))
+}
+
+
+logistic_midpoint_slope = function(x, midpoint, slope)
+{
+  b = get_logistic_param_b(slope)
+  a = get_logistic_param_a(slope, midpoint)
+  return(logistic(x, a, b))
+}
+
+plot(x = dat_all$ba.tot, xlab = "Total Basal Area (m^2/hect)",
+     y = pufi_present_absent, ylab = "Likelihood of Purple Finch Presence",
+     main = "Purple Finch Presence within a Stand",
+     col = adjustcolor(rgb(0.7,0,1), alpha.f = 0.2), pch = 16, cex = 2)
+curve(logistic_midpoint_slope(x, midpoint = 30, slope = -1), add = TRUE)
+```
+
+**Q6 (3 pts.): Qualitatively describe the bird's presence/absence patterns in terms of basal area (or your other chosen predictor). Your answer should make reference to your fitted logistic model plot. Some questions you might consider are:**
+
+**- Does the bird species seem to prefer areas with high or low tree cover?** **- Does the bird species prefer low or high elevations? (for example, if you used elevation instead of basal area)** **- Does a logistic model seem like a good fit?**
+
+Similar to American Goldfinches, Purple Finches seem to prefer open areas as opposed to areas with high tree cover. According to this model, the trend shows that the finches decreased with the Total Basal Area. Logistic models are a good fit for data that has a high level of 0/1 or presence/absence data.
+
+### Gray Jays
+
+**Q7 (1 pt.): How many total number of Gray Jays were observed in all of the sampling sites.**
+
+110
+
+**Q8 (2 pts.): Show the R code you used to perform the calculation.**
+
+```{r echo=FALSE}
+gj <- dat_all$GRJA
+gj > 1
+as.numeric(gj > 1)
+grja_present_absent <- as.numeric(gj > 0)
+sum(grja_present_absent)
+```
+
+**Q9 (1 pt.): Calculate the total number of sampling sites in which Gray Jays were observed.**
+
+59
+
+**Q10 (2 pts.): Include the R code you used to perform the presence/absence calculation.**
+
+```{r echo=FALSE}
+gj <- dat_all$GRJA
+gj > 1
+as.numeric(gj > 1)
+grja_present_absent <- as.numeric(gj > 1)
+sum(grja_present_absent)
+```

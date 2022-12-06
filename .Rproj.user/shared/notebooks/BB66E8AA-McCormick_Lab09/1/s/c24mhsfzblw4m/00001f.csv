@@ -1,0 +1,8 @@
+"0","require(here)"
+"0","FL_trees <- read.csv(here(""data"", ""trees_FL.csv""))"
+"0",""
+"0","fail <- table(FL_trees$ProbabilityofFailure)"
+"0","stfail <- table(FL_trees$Failure_Standardized)"
+"0","par(mfrow = c(2,2))"
+"0","barplot(fail, main = ""FL Trees Probability of Failure"", xlab = ""Number of Trees"","
+"0","        col = ""seagreen3"")"

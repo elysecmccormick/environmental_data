@@ -1,0 +1,3 @@
+"0",""
+"0","hist(dat_random$resids, xlab = ""Residuals"", main = ""Residuals"", col = ""steelblue1"")"
+"0",""

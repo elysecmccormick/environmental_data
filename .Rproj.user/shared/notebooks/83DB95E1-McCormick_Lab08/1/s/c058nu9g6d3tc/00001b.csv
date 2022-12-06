@@ -1,0 +1,7 @@
+"0","plot("
+"0","  density(result_mc),"
+"0","  main = ""Elyse's Null and Alternative Distribution Density Plot"","
+"0","  xlab = ""Slope Coefficient"","
+"0","  col = ""skyblue"","
+"0","  xlim = c(-0.05,0.05),"
+"0","  ylim = c(0,70))"

@@ -1,0 +1,6 @@
+"0","boxplot(formula = body_mass_g ~ sex * species, data = penguins, "
+"0","        main = ""Penguin Body Mass by Sex and Species"","
+"0","        names = c("" Female \n Adelie"", ""Male \n Adelie"", ""Female \n Chinstrap"", ""Male \n Chinstrap"","
+"0","                  ""Female \n Gentoo"", ""Male \n Gentoo""),"
+"0","        xlab = """","
+"0","        ylab = ""Body Mass (g)"", las = 2, col = ""slategray1"")"

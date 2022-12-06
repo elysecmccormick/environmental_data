@@ -1,0 +1,177 @@
+---
+title: "Lab 07 - The Bootstrap"
+author: "Elyse McCormick"
+date: "`r Sys.Date()`"
+output: html_document
+Subtitle: ECO 602
+---
+
+**Q1 (1 pt.): What is the sample size, n? Show the code you used for the calculation and remember to check for missing data.**
+
+```{r}
+require(palmerpenguins)
+dat_pen = droplevels(subset(penguins, species != "Adelie"))
+dat_peng = droplevels(subset(dat_pen, species != "Chinstrap"))
+n = sum(!is.na(dat_peng$bill_length_mm))
+print(n)
+```
+
+**Q2 (1 pt.): What is the sample standard deviation? Show the code you used for the calculation.**
+
+```{r}
+sd(dat_peng$bill_length_mm, na.rm = TRUE)
+```
+
+**Q3 (2 pts.): What are the critical t-values? Show the R code you used for the calculation.**
+
+```{r}
+alpha = 0.05
+t_crit = abs(qt(alpha / 2, df = n - 1))
+print(t_crit)
+```
+
+**Q4 (1 pt.): What is the sample standard error? Show the R code you used for the calculation.**
+
+```{r}
+sse = sd(dat_peng$bill_length_mm, na.rm = TRUE) / sqrt(n)
+print(sse)
+```
+
+**Q5 (2 pts.): Finally, construct the CI and show the R code you used for the calculation.**
+
+```{r}
+ci_radius = sse * t_crit
+ci = c(
+  lower = mean(dat_peng$bill_length_mm, na.rm = TRUE) - ci_radius,
+  upper = mean(dat_peng$bill_length_mm, na.rm = TRUE) + ci_radius)
+print(round(ci, 4))
+```
+
+**Q6 (1 pt.): What is the CI?**
+
+  2.5%    97.5% 
+46.97580 48.05935 
+
+**Q7 (1 pt.): Show the r code you used to call the boot() function.**
+
+```{r}
+require(boot)
+boot_mean = function(x, i)
+{
+  return(mean(x[i], na.rm = TRUE))
+}
+
+gentooboot = 
+  boot(
+    data = dat_peng$bill_length_mm,
+    statistic = boot_mean,
+    R = 10000)
+print(gentooboot)
+```
+
+**Q8 (2 pts.): Show the r code you used to calculate the upper and lower 2.5% quantiles.**
+
+```{r}
+quantile(
+  gentooboot$t,
+  c(0.025, 0.975))
+```
+
+**Q9 (5 pts.): Show your completed rarefaction_sampler() function.**
+
+{
+  n_input_rows = nrow(input_dat)
+  
+  results_out = matrix(
+    nrow = n_iterations,
+    ncol = n_input_rows)
+  
+  for(i in 1:n_iterations)
+  { 
+       for(j in 1:n_input_rows)
+    {
+      rows_j = sample(n_input_rows, size = j, replace=TRUE)
+      
+      t1 = input_dat[rows_j, ]
+      
+      t2 = apply(t1, 2, sum)
+      
+      results_out[i, j] = sum(t2 > 0)
+    }
+  }
+
+**Q10 (1 pt.): What did you find most difficult about building the function?**
+
+Figuring out where the error was. 
+
+**Q11 (4 pts.): Show the code you used to perform the simulations and construct the curve.**
+
+```{r}
+# This clears the current R session's environment
+rm(list = ls())
+
+# Re-read my data:
+require(here)
+moths = read.csv(here("data", "moths.csv"))
+
+rarefaction_sampler = function(input_dat, n_iterations)
+{
+  n_input_rows = nrow(input_dat)
+  
+  results_out = matrix(
+    nrow = n_iterations,
+    ncol = n_input_rows)
+  
+  for(i in 1:n_iterations)
+  { 
+       for(j in 1:n_input_rows)
+    {
+      rows_j = sample(n_input_rows, size = j, replace=TRUE)
+      
+      t1 = input_dat[rows_j, ]
+      
+      t2 = apply(t1, 2, sum)
+      
+      results_out[i, j] = sum(t2 > 0)
+    }
+  }
+  return(results_out)
+}
+
+rarefact = rarefaction_sampler(moths[,-1], 100)
+head(rarefact)
+```
+
+**Q12 (4 pts.): Include your rarefaction curve plot in your report. Show the R-code you used to create your plot.**
+
+```{r}
+moths = read.csv(here("data", "moths.csv"))
+rarefact = rarefaction_sampler(moths[,-1], 10000)
+
+rare_mean = apply(rarefact, 2, mean)
+rare_quant = apply(rarefact, 2, quantile, probs=c(0.025, 0.975))
+rare = t(rbind(rare_mean, rare_quant))
+
+matplot(
+  rare,
+  type='l',
+  xlab='Number of sampling plots',
+  ylab='Moth Species richness',
+  main="Moth Species Richness Based on Plot Number Sampled"
+  
+  )
+
+legend(
+  'bottomright',
+  legend=c('mean','2.5%','97.5%'),
+  lty=c(1,2,3),col=c(1,2,3), inset=c(.1,.1))
+
+
+x = c(1:24)
+
+polygon(c(x,rev(x)),c(rare[,3],rev(rare[,2])),col=rgb(1, 0, 1, 0.5))
+```
+
+**Q13 (2 pts.): About how many sites should you visit if you want to see all of the moth species? Explain your reasoning using your rarefaction curve figure.**
+
+You should sample at least 15 sites if you want to see all of the moth species. The maximum number of species peaks and plateaus in 15 sites. 

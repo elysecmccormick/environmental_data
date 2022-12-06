@@ -1,0 +1,4 @@
+"0","require(here)"
+"0","catrate <- read.csv(here(""data"", ""catrate.csv""))"
+"0","hist(catrate$cat.rate, xlab = ""Catastrophe Rate"", main = ""Histogram of Catastrophe Rates"","
+"0","     col = ""orangered3"")"

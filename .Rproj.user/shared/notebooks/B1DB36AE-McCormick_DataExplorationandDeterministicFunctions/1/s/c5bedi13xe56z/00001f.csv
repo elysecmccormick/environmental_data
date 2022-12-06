@@ -1,0 +1,1 @@
+"0","hist(dat.hab$aspect, xlab = ""Aspect"", main = ""Aspect Distribution"", col = adjustcolor(rgb(0.5,0,1), alpha.f = 0.2), pch = 16, cex = 2)"

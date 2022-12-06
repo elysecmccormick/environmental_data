@@ -1,0 +1,1 @@
+"0","curve(logistic_midpoint_slope(x, midpoint = 30, slope = -1), add = TRUE)"

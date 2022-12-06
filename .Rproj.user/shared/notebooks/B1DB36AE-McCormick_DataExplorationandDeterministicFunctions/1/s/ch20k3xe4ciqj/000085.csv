@@ -1,0 +1,2 @@
+"0","plot(x = dat.hab$slope, xlab = ""Slope"", y = dat.hab$ba.tot, ylab = ""Total Basal Area (m^2)"","
+"0","     main = ""Total Basal Area Across Slopes"", col = adjustcolor(rgb(1,1,0), alpha.f = 0.2), pch = 16, cex = 2)"

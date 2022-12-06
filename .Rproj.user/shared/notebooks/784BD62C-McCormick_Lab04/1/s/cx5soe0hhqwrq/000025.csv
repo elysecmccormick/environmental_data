@@ -1,0 +1,1 @@
+"0","plot( x = dat_random$y, xlab = ""Observed"", y = dat_random$resids, ylab = ""Residuals"", pch = 8, col= ""steelblue1"")"
