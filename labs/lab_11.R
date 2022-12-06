@@ -491,7 +491,7 @@ for(j in 1:n_sds)
     fit_sim = linear_sim_fit(x = birdhab$ls,
                              y_int = int_obs,
                              slope = slope_obs,
-                             st_dev = sd_obs)
+                             st_dev = pop_sds[j])
     p_vals[i] = summary(fit_sim)$coefficients[2, "Pr(>|t|)"]
   }
   pop_sd_powers[j] = sum(p_vals < alpha) / n_sims
@@ -511,7 +511,7 @@ save(
 
 plot(power ~ sd, data = sim_output_dispersion,
      type = 'l', xlab = 'Dispersion', ylab = 'Power')
-abline(v = nrow(birdhab), lty = 2, col = 'red')
+abline(v = sd_obs, lty = 2, col = 'red')
 
 #############################################################################
 
@@ -539,11 +539,12 @@ pop_sd_powers = numeric(length(pop_sds))
 
 sample_sizes = seq(5, 100)
 
-sim_output_3 = matrix(numeric(nrow = length(pop_sds),ncol = length(sample_sizes)))
+sim_output_3 = matrix(nrow = length(pop_sds), ncol = length(sample_sizes))
+
 
 for(k in 1:length(pop_sds))
 {
-  pop_sd_k = pop_sds[k]
+  pop_sds_k = pop_sds[k]
   
   for(j in 1:length(sample_sizes))
   {
@@ -555,7 +556,7 @@ for(k in 1:length(pop_sds))
         x = x_vals,
         y_int = int_obs,
         slope = effect_size,
-        st_dev = sd_obs
+        st_dev = pop_sds_k
       )
       p_vals[i] = summary(fit_sim)$coefficients[2, 'Pr(>|t|)']
     }
@@ -579,6 +580,42 @@ save(
   sim_3_dat, 
   file = here::here("data", "lab_ll_sim_output_dispersion_n_1000.RData"))
 
+# Contour plot
+
+contour(
+  x = sim_3_dat$pop_sd,
+  y = sim_3_dat$sample_size,
+  z = sim_3_dat$power,
+  xlab = "Dispersion",
+  ylab = "sample size",
+  main = "Contour Plot of Disperson and Sample Size Statistical Power",
+  levels = seq(0, 1, length.out = 9),
+  drawlabels = TRUE,
+  # method = "simple")
+  method = "edge")
+
+# Interactive plot
+
+require("rgl")
+
+persp3d(
+  x = sim_3_dat$pop_sd,
+  y = sim_3_dat$sample_size,
+  z = sim_3_dat$power,
+  xlab = "Dispersion", ylab = "Sample Size", zlab = "Power",
+  col = 'lightblue',
+  theta = 30, phi = 30, expand = 0.75,
+  ticktype = 'detailed')
+
+#Save the plot
+
+require(htmlwidgets)
+saveWidget(
+  rglwidget(),
+  file = here(
+    "data", "n_effect_size_power_sim_plot.html"),
+  selfcontained = TRUE
+)
 
 
 
