@@ -1,0 +1,6 @@
+"0",""
+"0","x = seq(-3, 3, length.out = 1000)"
+"0","y = rnorm(x)"
+"0",""
+"0","plot(x, y, main = ""Random Numbers"", type = ""l"")"
+"0",""

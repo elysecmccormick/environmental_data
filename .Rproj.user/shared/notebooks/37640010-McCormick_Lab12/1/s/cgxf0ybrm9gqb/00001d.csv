@@ -1,0 +1,2 @@
+"0",""
+"0","lines(GCKI_predicted ~ ba.tot, data = ba_newdata)"

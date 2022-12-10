@@ -1,0 +1,2 @@
+"0","par(mfrow = c(1,2))"
+"0","boxplot(ginkgo_data$petiole_length, main = ""Ginkgo Petiole Lengths"", xlab = """", ylab = ""Petiole Length (cm) "", col = ""springgreen3"")"

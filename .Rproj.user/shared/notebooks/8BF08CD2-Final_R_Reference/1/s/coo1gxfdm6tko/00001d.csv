@@ -1,0 +1,3 @@
+"0",""
+"0","hist(dat_pen$flipper_length_mm, breaks = 5, xlab = ""Flipper Length (mm)"", main = ""Histogram of Penguin Flipper length "", "
+"0","     col = ""steelblue"")"

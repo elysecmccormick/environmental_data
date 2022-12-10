@@ -1,0 +1,4 @@
+"0","plot(x = ginkgo_data$max_depth, y = ginkgo_data$max_width,"
+"0","     xlim = NULL, ylim = NULL, xlab = ""Maximum Leaf Depth (cm)"", "
+"0","     ylab = ""Maximum Leaf Width (cm)"", main = ""Ginkgo Leaf Dimensions"","
+"0","     pch = 8, cex = 1, col = ""gold"")"

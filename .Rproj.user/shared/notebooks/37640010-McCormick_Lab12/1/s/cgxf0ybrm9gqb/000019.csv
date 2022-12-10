@@ -1,0 +1,2 @@
+"0",""
+"0","lines(GCKI_predicted ~ slope, data = slope_newdata)"

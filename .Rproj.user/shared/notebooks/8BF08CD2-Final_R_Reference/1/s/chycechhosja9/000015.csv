@@ -1,0 +1,4 @@
+"0","require(palmerpenguins)"
+"0","dat_pen <- palmerpenguins::penguins"
+"0","hist(dat_pen$flipper_length_mm, breaks = 5, xlab = ""Flipper Length (mm)"", main = ""Histogram of Penguin Flipper Length "", "
+"0","     col = ""skyblue"")"

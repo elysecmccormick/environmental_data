@@ -1,0 +1,4 @@
+"0","ginkgo_dat = read.csv("
+"0","  here(""data"", ""ginkgo_data_2022.csv"")"
+"0",")"
+"0","head(ginkgo_dat)"

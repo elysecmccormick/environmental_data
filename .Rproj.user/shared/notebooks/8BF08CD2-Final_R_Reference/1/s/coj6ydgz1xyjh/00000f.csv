@@ -1,0 +1,2 @@
+"0","require(palmerpenguins)"
+"0","dat_pen = droplevels(subset(penguins, species == ""Adelie""))"

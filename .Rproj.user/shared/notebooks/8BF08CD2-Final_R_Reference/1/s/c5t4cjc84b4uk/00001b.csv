@@ -1,0 +1,5 @@
+"0",""
+"0","x = seq(-3, 3, length.out = 1000)"
+"0","y = qnorm(x)"
+"2","Warning: NaNs produced"
+"0","plot(x, y, main = ""Quantile Function"", type = ""l"")"

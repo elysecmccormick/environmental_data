@@ -1,0 +1,7 @@
+"0",""
+"0","plot("
+"0","  GCKI_pres ~ ba.tot, data = dat_all,"
+"0","  xlab = ""Basal Area"","
+"0","  ylab = ""GCKI presence/absence"","
+"0","  pch = 16, cex = 1.5, col = gray(0, 0.2)"
+"0",")"

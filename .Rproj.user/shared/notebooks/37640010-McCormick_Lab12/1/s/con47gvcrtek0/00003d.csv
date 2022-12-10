@@ -1,0 +1,1 @@
+"0","points(x = sim_output_dispersion$sd, y = sim_output_dispersion$power, col = ""red"")"

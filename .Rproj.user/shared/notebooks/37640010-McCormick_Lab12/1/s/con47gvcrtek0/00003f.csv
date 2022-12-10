@@ -1,0 +1,5 @@
+"0",""
+"0","legend(""bottomleft"","
+"0","       c(""original \n"",""smooth""), "
+"0","       lty=c(NA,1),pch=c('o',NA),"
+"0","       horiz=TRUE, cex=0.6)"

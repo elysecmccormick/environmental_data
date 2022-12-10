@@ -1,0 +1,3 @@
+"0",""
+"0","boxplot(formula = max_width ~ seeds_present, data = ginkgo_data, main = ""Leaf Width by Seed Presence"","
+"0","        xlab = ""Seed Presence"", ylab = ""Maximum Width (cm)"", col = ""gold"")"

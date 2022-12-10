@@ -1,0 +1,4 @@
+"0","par(mfrow = c(2,2))"
+"0",""
+"0","hist(dat_pen$body_mass_g, breaks = 5, xlab = ""Body Mass (g)"", main = ""Histogram of Penguin Body Mass"", "
+"0","     col = ""midnightblue"")"
