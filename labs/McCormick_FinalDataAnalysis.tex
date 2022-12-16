@@ -1,0 +1,207 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Final Data Analysis},
+  pdfauthor={Elyse McCormick},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Final Data Analysis}
+\author{Elyse McCormick}
+\date{2022-12-14}
+
+\begin{document}
+\maketitle
+
+\textbf{Q1 (2 pts.): Qualitatively describe the relationship between
+body mass and length.Does the relationship seem linear, curved,
+nonexistent?}
+
+The relationship between body mass and body length seems mostly linear,
+but left-skewed with an array of outliers.
+
+\textbf{Q2 (2 pts.): Qualitatively describe the shapes of the
+histograms. Do the data appear normally-distributed? Explain why or why
+not.Explain why we care (or not) whether the data are normally
+distributed.}
+
+Body mass seems relatively normally distributed around 40 g, but the
+middle of the curve is much higher than the rest of the dataset,
+indicating it's not a perfectly normal distribution.
+
+Body length is not normally distributed, with what is almost a peak at
+100 cm, and very little spread, indicating leptokurtosis. This also
+indicates it is not a normal distribution.
+
+Normally distributed data means that we can run parametric tests on the
+data. Additionally, normal distributions are
+
+\textbf{Q3 (2 pts.): Using both the histograms and normality tests, do
+you think the (unconditioned) body masses and body length are
+normally-distributed?Make sure you contrast your visual assessment of
+normality to the results of the numerical normality tests.}
+
+Between both the histograms and the Shapiro-Wilk tests, I don't think
+these data are normally distributed. As described in question 2, neither
+histogram is perfectly normally distributed. Similarly, the p values of
+the Shapiro-Wilk tests showed p \textless{} 0.05 (body mass: p =
+4.33e-05, body length: p = 2.2e-16), indicating that the data are not
+normally distributed.
+
+\textbf{Q4 (2 pts.): Examine the three conditional boxplots.Describe any
+graphical evidence you see for body mass differences based on species
+and/or sex.}
+
+When looking by species, the conditional boxplot shows that D. dorsalis
+has a slightly higher mass. When looking at the conditional boxplot for
+sex, the boxplots show no difference. When looking at the conditional
+boxplot for both sex and species, it indicates that in both species,
+females seem to have a higher weight than male.
+
+\textbf{Q5 (2 pts.): What do you conclude about residual normality based
+on the numerical and graphical diagnostics?}
+
+The data appear to be non-normal from both the histograms and the
+Shapiro-Wilk tests. However, the graphical diagnostics would lead me to
+believe the data are slightly more normal than the Shapiro Tests
+indicate. The Shapiro-Wilk tests have extremely low p values, while some
+of the histograms have mild to extreme kurtosis. The first set of
+residuals is completely leptokurtotic, while the distribution improves
+with every subsequent model.
+
+\textbf{Q6 (1 pt.): Are violations of the normality assumption equally
+severe for all the models?}
+
+Graphically no, but the p values from the Shapiro-Wilk tests indicate
+that all 5 models are very non-normal, with p values well below p =
+0.0001.
+
+\textbf{Q7 (2 pts.): What is the magnitude of the mass/length
+relationship?}
+
+The magnitude of the mass/length relationship is the mean estimate,
+which in model 1 is 0.8755.
+
+\textbf{Q8 (2 pts.): What is the expected body length of an animal that
+weighs 100g?}
+
+The expected body length is 76.12 cm.
+
+\textbf{Q9 (2 pts.): What is the expected body length of an animal that
+weighs 0g?}
+
+The expected body length is 0 cm.
+
+\textbf{Q10 (1 pt.): What is the base level for sex?}
+
+Body mass
+
+\textbf{Q11 (1 pt.): What is the base level for binomial?}
+
+Body Mass
+
+\textbf{Q12 (1 pt.): Which sex is heavier? How do you know?}
+
+Females are heavier, based on the conditional boxplots. Based on the
+available output, without post-hoc tests I can't determine this another
+way.
+
+\textbf{Q13 (1 pt.): Which species is heavier? How do you know?}
+
+Delomys dorsalis is heavier, based on the conditional boxplots. From the
+available output, without post-hoc tests I can't determine this another
+way.
+
+\textbf{Q14 (1 pt.): Are sex and species significant predictors for body
+mass?}
+
+Yes, sex and species are significant predictors for body mass.
+
+\textbf{Q15 (1 pt.): Is there a significant interaction?}
+
+No, there is not a significant factorial interaction between them, but
+there is an additive effect between species and sex.
+
+\textbf{Q16 (2 pts.): Examine the p-values for the main effects (sex and
+species) in all four of the ANOVA tables. Does the significance level of
+either main effect change very much among the different models?}
+
+No, the significance level stays extremely similar throughout the
+models.
+
+\textbf{Q17 (1 pt.): Which two models have the lowest AIC?}
+
+Models fit1 and fit4 have the lowest AIC scores.
+
+\textbf{Q18 (4 pts.): Which of the two models with lowest AIC scores
+would you select? Explain your decision based on model fit and the
+complexity/understanding tradeoff.}
+
+I would choose fit4 as the best model choice. Though it had the second
+to lowest AIC score (fit1 was lower), fit4 incorporates more complexity
+while still showing what the best model fit is. This allows us to see
+interactions between both species and sex within these mice, while fit1
+only can analyze body length and body mass. This complexity gives better
+insight into the biology of the interaction, making fit4 a good model to
+select. This is a good use of the trade off, as the other three models
+had varying levels of complexity but higher AIC scores, indicating the
+fit was not ideal for other models.
+
+\end{document}

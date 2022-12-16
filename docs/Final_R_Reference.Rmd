@@ -223,54 +223,48 @@ hist(dat_pen$flipper_length_mm, breaks = 5, xlab = "Flipper Length (mm)", main =
 
 There are four distribution functions for normal distributions. They are as follows:
 
-dnorm(): the probability density
-
-pnorm(): the cumulative probability density
-
-qnorm(): the quantile function
-
-rnorm(): function to generate random, normally-distributed numbers.
-
-You can use these to create plots that show the distribution for the dataset. 
+**dnorm():** the probability density, where x is the sample size, mean is the population average, and the sd is the standard deviation.
 
 ```{r}
-par(mfrow = c(2,2))
+dnorm(x = 2, mean = 2, sd = 4)
+```
 
-x = seq(-3, 3, length.out = 1000)
-y = dnorm(x)
+**pnorm():** calculates the cumulative probability density function. This is where you can calculate the area to the left of a curve, unless you go in and tell it to do something different. Here again, x is the sample size, mean is the population average, and the sd is the standard deviation. You can set the lower tail to either be true (the value less than the quartile) or false (the value greater than the quartile), but it is FALSE by default. 
 
-plot(x, y, main = "Normal Probability Density", type = "l")
 
-x = seq(-3, 3, length.out = 1000)
-y = pnorm(x)
+```{r}
+pnorm(q = 1.5, mean = 0, sd = 2, lower.tail = FALSE)
+```
 
-plot(x, y, main = "Cumulative Probability Distribution", type = "l")
+**qnorm():** this is the the quantile function, which calculates the inverse of the previous function. Here, p is the inverse, which is your value of interest, the x is the sample size, mean is the population average, and the sd is the standard deviation. Just as before, you can set the lower tail to either be true (the value less than the quartile) or false (the value greater than the quartile), but it is FALSE by default. 
 
-x = seq(-3, 3, length.out = 1000)
-y = qnorm(x)
-
-plot(x, y, main = "Quantile Function", type = "l")
-
-x = seq(-3, 3, length.out = 1000)
-y = rnorm(x)
-
-plot(x, y, main = "Random Numbers", type = "l")
-
+```{r}
+qnorm(p = 0.5, mean = 1, sd = 2, lower.tail = FALSE)
 ```
 
 
+There are also three distribution functions for binomial distributions.
 
-There are also two distribution functions for binomial distributions.
-
-pbinom(): This gives you the area under the left side of the tail of a binomial distribution. This also helps you calculate the probability of an event. 
-
-qbinom(): This gives the area under the bi binomial distribution. This helps calculate the probability of an event to the 'p'th quantile. 
+dbinom() gives you the probability density function of a normal binomial distribution, where x is the total number of successes, size is the total number of trials, and prob is the probability of success. 
 
 ```{r}
+dbinom(x = 7, size = 8, prob = .5)
+```
 
+pbinom(): This gives you the area under the left side of the tail of a binomial distribution. This also helps you calculate the probability of an event. Here, x is the total number of successes, size is the total number of trials, and prob is the probability of success. You can set the lower tail to either be true (the value less than the quartile) or false (the value greater than the quartile), but it is FALSE by default. 
+
+This give you the value to the left of your p value. 
+
+```{r}
 #pbinom() used to find 7 or fewer successes, when the sample size is 30 items, and the probability is 30%
-pbinom(7, size=30, prob=.3)
+pbinom(7, size=30, prob=.3, lower.tail = FALSE)
+```
 
+qbinom(): This gives the area under the binomial distribution. This helps calculate the probability of an event to the 'p'th quantile. Here, x is the total number of successes, size is the total number of trials, and prob is the probability of success. You can set the lower tail to either be true (the value less than the quartile) or false (the value greater than the quartile), but it is FALSE by default. 
+
+This gives you the value to the left of your q value. 
+
+```{r}
 #qbinom() used to find the 25th quantile in 30 trials with a probability of 40%
 qbinom(.25, size=30, prob=.4)
 

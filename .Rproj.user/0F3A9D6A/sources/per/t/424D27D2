@@ -1,27 +1,27 @@
 {
-    "id": "C137EE74",
+    "id": "424D27D2",
     "path": "~/University of Massachusetts/ECO_602/environmental_data/labs/McCormick_FinalDataAnalysis.Rmd",
     "project_path": "labs/McCormick_FinalDataAnalysis.Rmd",
     "type": "r_markdown",
-    "hash": "3595085604",
+    "hash": "797213285",
     "contents": "",
     "dirty": false,
-    "created": 1670697290917.0,
+    "created": 1671027511767.0,
     "source_on_save": false,
-    "relative_order": 3,
+    "relative_order": 2,
     "properties": {
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "45,166",
-        "scrollLine": "15"
+        "cursorPosition": "89,0",
+        "scrollLine": "73"
     },
     "folds": "",
-    "lastKnownWriteTime": 1670697770,
+    "lastKnownWriteTime": 1671042782,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1670697770538,
+    "last_content_update": 1671042782045,
     "read_only": false,
     "read_only_alternatives": []
 }

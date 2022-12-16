@@ -11,4 +11,4 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Welcome to Elyse's Class Homepage!
 
-[Final Project: R Reference Guide](Final_R_reference.html)
+[Final Project: R Reference Guide](Final_R_Reference.html)

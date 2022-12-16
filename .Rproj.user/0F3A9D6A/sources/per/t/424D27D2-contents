@@ -11,36 +11,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
-```{r}
-# Clear Environment
-
-rm(list = ls())
-
-# Load packages
-library(here)
-
-# Load data
-delomys_dat = read.csv(here("data", "delomys.csv"))
-
-#Visualize with scatterplot
-plot(x = delomys_dat$body_mass, y = delomys_dat$body_length,
-     main = "Delomys spp. Body Mass by Length", xlab = "Body Mass (g)",
-     ylab = "Body Length (cm)", pch = 16, col = "lightsalmon2")
-```
-
-**Q1 (2 pts.): Qualitatively describe the relationship between body mass and length. Does the relationship seem linear, curved, nonexistent?**
+**Q1 (2 pts.): Qualitatively describe the relationship between body mass and length.Does the relationship seem linear, curved, nonexistent?**
 
 The relationship between body mass and body length seems mostly linear, but left-skewed with an array of outliers. 
-
-```{r}
-#Visualize with histograms
-par(mfrow = c(1,2))
-hist(x = delomys_dat$body_mass, main = "Delomys spp. Body Mass", 
-     xlab = "Body Mass (g)", col = "lightsalmon")
-hist(x = delomys_dat$body_length, main = "Delomys spp. Body Length", 
-     xlab = "Body Mass (g)", col = "lightsalmon3")
-```
 
 **Q2 (2 pts.): Qualitatively describe the shapes of the histograms. Do the data appear normally-distributed? Explain why or why not.Explain why we care (or not) whether the data are normally distributed.**
 
@@ -50,31 +23,9 @@ Body length is not normally distributed, with what is almost a peak at 100 cm, a
 
 Normally distributed data means that we can run parametric tests on the data. Additionally, normal distributions are 
 
-```{r}
-#Summary of the data, summary by column, and Shapiro tests for normality
-summary(delomys_dat)
-summary(delomys_dat$body_mass)
-summary(delomys_dat$body_length)
-shapiro.test(delomys_dat$body_mass)
-shapiro.test(delomys_dat$body_length)
-```
-
-
 **Q3 (2 pts.): Using both the histograms and normality tests, do you think the (unconditioned) body masses and body length are normally-distributed?Make sure you contrast your visual assessment of normality to the results of the numerical normality tests.**
 
 Between both the histograms and the Shapiro-Wilk tests, I don't think these data are normally distributed. As described in question 2, neither histogram is perfectly normally distributed. Similarly, the p values of the Shapiro-Wilk tests showed p < 0.05 (body mass: p = 4.33e-05, body length: p = 2.2e-16), indicating that the data are not normally distributed. 
-
-```{r}
-
-#Visualize with boxplots
-boxplot(body_mass ~ binomial, data = delomys_dat, xlab = "Species", ylab = "Body Mass (g)", col = c("salmon","lightsalmon4"))
-boxplot(body_mass ~ sex, data = delomys_dat, xlab = "Sex", ylab = "Body Mass (g)", col = c("sienna", "lightsalmon3"))
-boxplot(body_mass ~ binomial*sex, data = delomys_dat, xlab = "Species", ylab = "Body Mass (g)",
-        las = 2,
-      cex.axis= .7,
-      names = c("D.dorsalis \n female ", "D. sublineatus \n female", 
-                  "D. dorsalis \n male ", "D.sublineatus \n male"), col = c("salmon", "lightsalmon2", "light salmon3", "lightsalmon4"))
-```
 
 **Q4 (2 pts.): Examine the three conditional boxplots.Describe any graphical evidence you see for body mass differences based on species and/or sex.**
 
@@ -82,39 +33,7 @@ When looking by species, the conditional boxplot shows that D. dorsalis has a sl
 
 **Q5 (2 pts.): What do you conclude about residual normality based on the numerical and graphical diagnostics?**
 
-The residuals appear to be non-normal from both the histograms and the Shapiro-Wilk tests. However, the graphical diagnostics would lead me to believe the residuals are slightly more normal than the Shapiro Tests indicate. The Shapiro-Wilk tests have extremely low p values, while some of the histograms have mild to extreme kurtosis. The first set of residuals is completely leptokurtotic, while the distribution improves with every subsequent model.  If the residuals are not normal, it's more likely the data are not normally distributed.
-
-```{r echo=TRUE}
-# Create linear models 
-fit1 <- lm(delomys_dat$body_length ~ delomys_dat$body_mass)
-fit2 <- lm(delomys_dat$body_mass ~ delomys_dat$sex)
-fit3 <- lm(delomys_dat$body_mass ~ delomys_dat$binomial)
-fit4 <- lm(delomys_dat$body_mass ~ delomys_dat$sex + delomys_dat$binomial)
-fit5 <- lm(delomys_dat$body_mass ~ delomys_dat$sex * delomys_dat$binomial)
-
-# Residuals
-fit1res <- residuals(fit1)
-fit2res <- residuals(fit2)
-fit3res <- residuals(fit3)
-fit4res <- residuals(fit4)
-fit5res <- residuals(fit5)
-
-#Shapiro-Wilk Test for Normality on Residuals
-shapiro.test(fit1res)
-shapiro.test(fit2res)
-shapiro.test(fit3res)
-shapiro.test(fit4res)
-shapiro.test(fit5res)
-#None of these are normally distributed
-
-#Linear Regression summaries
-knitr::kable(coef(summary(fit1)))
-knitr::kable(coef(summary(fit2)))
-knitr::kable(coef(summary(fit3)))
-knitr::kable(coef(summary(fit4)))
-knitr::kable(coef(summary(fit5)))
-
-```
+The data appear to be non-normal from both the histograms and the Shapiro-Wilk tests. However, the graphical diagnostics would lead me to believe the data are slightly more normal than the Shapiro Tests indicate. The Shapiro-Wilk tests have extremely low p values, while some of the histograms have mild to extreme kurtosis. The first set of residuals is completely leptokurtotic, while the distribution improves with every subsequent model.  
 
 **Q6 (1 pt.): Are violations of the normality assumption equally severe for all the models?**
 
@@ -126,31 +45,27 @@ The magnitude of the mass/length relationship is the mean estimate, which in mod
 
 **Q8 (2 pts.): What is the expected body length of an animal that weighs 100g?**
 
-The expected body length is 76.12 cm + (100 g (body weight) * 0.8766).
-
-```{r}
-76.12 + (100 *0.8766) 
-```
+The expected body length is 76.12 cm. 
 
 **Q9 (2 pts.): What is the expected body length of an animal that weighs 0g?**
 
-The expected body length is 0 cm logically, but the table says 76.12 cm. 
+The expected body length is 0 cm. 
 
 **Q10 (1 pt.): What is the base level for sex?**
 
-Female
+Body mass
 
 **Q11 (1 pt.): What is the base level for binomial?**
 
-*D. dorsalis*
+Body Mass
 
 **Q12 (1 pt.): Which sex is heavier? How do you know?**
 
-Males. The intercept is the female mass, which means that the mass of the females (intercept) is added to the male mass value. 
+Females are heavier, based on the conditional boxplots. Based on the available output, without post-hoc tests I can't determine this another way.
 
 **Q13 (1 pt.): Which species is heavier? How do you know?**
 
-*Delomys dorsalis* is heavier. They are the intercept, and *D. sublineatus* is negative, meaning their mass would be subtracted from the intercept, which would make their mass less than *D. dorsalis*. 
+Delomys dorsalis is heavier, based on the conditional boxplots. From the available output, without post-hoc tests I can't determine this another way. 
 
 **Q14 (1 pt.): Are sex and species significant predictors for body mass?**
 
@@ -163,17 +78,6 @@ No, there is not a significant factorial interaction between them, but there is 
 **Q16 (2 pts.): Examine the p-values for the main effects (sex and species) in all four of the ANOVA tables. Does the significance level of either main effect change very much among the different models?**
 
 No, the significance level stays extremely similar throughout the models. 
-
-```{r}
-#AIC
-
-AIC(fit1)
-AIC(fit2)
-AIC(fit3)
-AIC(fit4)
-AIC(fit5)
-```
-
 
 **Q17 (1 pt.): Which two models have the lowest AIC?**
 

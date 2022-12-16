@@ -51,7 +51,6 @@ fit4res <- residuals(fit4)
 fit5res <- residuals(fit5)
 
 #Histogram of Residuals
-par(mfrow = c(3,2))
 hist(fit1res)
 hist(fit2res)
 hist(fit3res)
